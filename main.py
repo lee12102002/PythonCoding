@@ -16,7 +16,7 @@ def create_csv_file():
     if not path.exists(CSV_FILE):
         with open(CSV_FILE, mode='w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['ID', 'Name', 'DOB', 'Email', 'Department', 'Phone Number', 'Status'])
+            writer.writerow(['ID', 'Name', 'DOB', 'Email', 'Department', 'Phone Number'])
         print(f"CSV file '{CSV_FILE}' created successfully.")
 
 def is_unique_id(id):
@@ -220,8 +220,28 @@ def main():
             controller.update_student(id, name, dob, email, department, phone_number)
 
         elif choice == "4":
-            # Delete operation
-            pass
+            delete_option = input("Choose delete option (1: Delete by ID, 2: Delete by Email, 3: Delete by ID Range, 4: Delete by DOB Range): ")
+            if delete_option == "1":
+                student_id = input("Enter student ID to delete: ")
+                controller.delete_student_by_id(student_id)
+                print("Student deleted successfully.")
+            elif delete_option == "2":
+                email = input("Enter student email to delete: ")
+                controller.delete_student_by_email(email)
+                print("Student deleted successfully.")
+            elif delete_option == "3":
+                start_id = int(input("Enter starting ID of the range: "))
+                end_id = int(input("Enter ending ID of the range: "))
+                controller.delete_students_in_id_range(start_id, end_id)
+                print("Students in the ID range deleted successfully.")
+            elif delete_option == "4":
+                start_dob = input("Enter starting date of birth (YYYY-MM-DD) of the range: ")
+                end_dob = input("Enter ending date of birth (YYYY-MM-DD) of the range: ")
+                controller.delete_students_in_dob_range(start_dob, end_dob)
+                print("Students in the DOB range deleted successfully.")
+            else:
+                print("Invalid delete option.")
+
         elif choice == "5":
             break
         else:

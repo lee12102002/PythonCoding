@@ -15,7 +15,7 @@ def create_csv_file():
     if not path.exists(CSV_FILE):
         with open(CSV_FILE, mode='w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['ID', 'Name', 'DOB', 'Email', 'Department', 'Phone Number', 'Status'])
+            writer.writerow(['ID', 'Name', 'DOB', 'Email', 'Department', 'Phone Number'])
         print(f"CSV file '{CSV_FILE}' created successfully.")
 
 class StudentController:
@@ -37,6 +37,18 @@ class StudentController:
 
     def delete_student(self, id):
         self.model.delete_student(id)
+    
+    def delete_student_by_id(self, student_id):
+        self.model.delete_student_by_id(student_id)
+
+    def delete_student_by_email(self, email):
+        self.model.delete_student_by_email(email)
+
+    def delete_students_in_id_range(self, start_id, end_id):
+        self.model.delete_students_in_id_range(start_id, end_id)
+
+    def delete_students_in_dob_range(self, start_dob, end_dob):
+        self.model.delete_students_in_dob_range(start_dob, end_dob)
     
     def read_students_pagination(self):
         students = self.model.read_students()

@@ -2,9 +2,10 @@ import re
 import csv
 from datetime import datetime
 from functools import lru_cache
+import os
 
 class Student:
-    def __init__(self, id, name, dob, email, department, phone_number, status="Pending"):
+    def __init__(self, id, name, dob, email, department, phone_number):
         self.id = id
         self.name = name
         self.dob = dob
@@ -118,7 +119,7 @@ class StudentModel:
         
         with open(self.csv_file, mode='a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow([student.id, student.name, student.dob, student.email, student.department, student.phone_number, student.status])
+            writer.writerow([student.id, student.name, student.dob, student.email, student.department, student.phone_number])
     
     def read_students(self):
         students = []
@@ -136,11 +137,98 @@ class StudentModel:
             writer = csv.writer(temp)
             for row in reader:
                 if row[0] == student.id:
-                    row = [student.id, student.name, student.dob, student.email, student.department, student.phone_number, student.status]
+                    row = [student.id, student.name, student.dob, student.email, student.department, student.phone_number]
                 writer.writerow(row)
         import os
         os.remove(self.csv_file)
         os.rename(temp_file, self.csv_file)
+
+    
+
+    def delete_student_by_id(self, student_id):
+        found = False
+        temp_file = "temp.csv"
+        with open(self.csv_file, mode='r') as file, open(temp_file, mode='w', newline='') as temp:
+            reader = csv.reader(file)
+            writer = csv.writer(temp)
+            for row in reader:
+                if row[0] == student_id:
+                    found = True
+                else:
+                    writer.writerow(row)
+
+        if found:
+            import os
+            os.remove(self.csv_file)
+            os.rename(temp_file, self.csv_file)
+            print("Student deleted successfully.")
+        else:
+            print(f"No such student with the ID {student_id}.")
+
+
+    def delete_student_by_email(self, email):
+        found = False
+        temp_file = "temp.csv"
+        with open(self.csv_file, mode='r') as file, open(temp_file, mode='w', newline='') as temp:
+            reader = csv.reader(file)
+            writer = csv.writer(temp)
+            for row in reader:
+                if row[3] == email:
+                    found = True
+                else:
+                    writer.writerow(row)
+
+        if found:
+            import os
+            os.remove(self.csv_file)
+            os.rename(temp_file, self.csv_file)
+            print("Student deleted successfully.")
+        else:
+            print(f"No such student with the email {email}.")
+
+
+    def delete_students_in_id_range(self, start_id, end_id):
+        found = False
+        temp_file = "temp.csv"
+        with open(self.csv_file, mode='r') as file, open(temp_file, mode='w', newline='') as temp:
+            reader = csv.reader(file)
+            writer = csv.writer(temp)
+            for row in reader:
+                student_id = int(row[0])
+                if start_id <= student_id <= end_id:
+                    found = True
+                else:
+                    writer.writerow(row)
+
+        if found:
+            import os
+            os.remove(self.csv_file)
+            os.rename(temp_file, self.csv_file)
+            print("Students deleted successfully.")
+        else:
+            print(f"No such student found in the provided ID range {start_id} to {end_id}.")
+
+    def delete_students_in_dob_range(self, start_dob, end_dob):
+        found = False
+        temp_file = "temp.csv"
+        with open(self.csv_file, mode='r') as file, open(temp_file, mode='w', newline='') as temp:
+            reader = csv.reader(file)
+            writer = csv.writer(temp)
+            for row in reader:
+                student_dob = row[2]
+                if start_dob <= student_dob <= end_dob:
+                    found = True
+                else:
+                    writer.writerow(row)
+
+        if found:
+            import os
+            os.remove(self.csv_file)
+            os.rename(temp_file, self.csv_file)
+            print("Students deleted successfully.")
+        else:
+            print(f"No such student found in the provided DOB range {start_dob} to {end_dob}.")
+
 
     def delete_student(self, id):
         temp_file = "temp.csv"
@@ -153,3 +241,5 @@ class StudentModel:
         import os
         os.remove(self.csv_file)
         os.rename(temp_file, self.csv_file)
+    
+        
