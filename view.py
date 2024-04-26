@@ -8,7 +8,7 @@ class StudentView:
             print("Email:", student.email)
             print("Department:", student.department)
             print("Phone Number:", student.phone_number)
-            print("Status:", student.status)
+           
             print()
 
     def display_grouped_students(self, grouped_students, group_by):
@@ -21,5 +21,4 @@ class StudentView:
                 print("Email:", student[3])
                 print("Department:", student[4])
                 print("Phone Number:", student[5])
-                print("Status:", student[6])
                 print("")

@@ -62,11 +62,11 @@ def main():
 
             while True:
                 name = input("Enter student name: ")
-                if not name.isalpha():
-                    print("Name must contain only letters.")
+                if not re.match(r'^[a-zA-Z. ]+$', name):
+                    print("Name must contain only letters, spaces, and periods.")
                     continue
                 else:
-                    break 
+                    break  
 
             while True:
                 dob = input("Enter student DOB (YYYY-MM-DD): ")
@@ -122,14 +122,14 @@ def main():
             if read_option == "1":
                 id_or_email = input("Enter Student ID or Email: ")
                 if id_or_email.isdigit():
-                    student = model_instance.get_student_by_id(id_or_email)
+                    student_data = model_instance.get_student_by_id(id_or_email)
                 else:
-                    student = model_instance.get_student_by_email(id_or_email)
-                if student:
+                    student_data = model_instance.get_student_by_email(id_or_email)
+                if student_data:
+                    student = model.Student(*student_data.values())
                     view_instance.display_students([student])
                 else:
                     print("Student not found.")
-            
             elif read_option == "2":
                 group_option = input("Choose group option (1: Group display by ID, 2: Group display by DOB): ")
                 if group_option == "1":
@@ -164,11 +164,11 @@ def main():
             print("\nEnter updated student details:")
             while True:
                 name = input("Enter student name: ")
-                if not name.isalpha():
-                    print("Name must contain only letters.")
+                if not re.match(r'^[a-zA-Z. ]+$', name):
+                    print("Name must contain only letters, spaces, and periods.")
                     continue
                 else:
-                    break 
+                    break  
 
             while True:
                 dob = input("Enter student DOB (YYYY-MM-DD): ")

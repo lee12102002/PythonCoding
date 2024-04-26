@@ -1,6 +1,7 @@
 import re
 import csv
 from datetime import datetime
+from functools import lru_cache
 
 class Student:
     def __init__(self, id, name, dob, email, department, phone_number, status="Pending"):
@@ -10,10 +11,10 @@ class Student:
         self.email = email
         self.department = department
         self.phone_number = phone_number
-        self.status = status
+       
 
         # Validation logic
-        if not re.match(r'^[A-Za-z\s]{0,58}$', self.name):
+        if not re.match(r'^[A-Za-z.\s]{0,58}$', self.name):
             raise ValueError("Name must contain only letters and spaces, up to 60 characters")
         if not re.match(r'^[A-Za-z\s]+$', self.department):
             raise ValueError("Department must contain only letters and spaces")
@@ -35,9 +36,18 @@ class Student:
 class StudentModel:
     def __init__(self, csv_file):
         self.csv_file = csv_file
-       
-        def get_student_by_id(self, student_id):
-         with open(self.csv_file, mode='r') as file:
+
+    @lru_cache(maxsize=None)  # Cache all student records
+    def get_all_students(self):
+        students = []
+        with open(self.csv_file, mode='r') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                students.append(row)
+        return students
+
+    def get_student_by_id(self, student_id):
+        with open(self.csv_file, mode='r') as file:
             reader = csv.reader(file)
             next(reader)  # Skip header row
             for row in reader:
@@ -49,7 +59,7 @@ class StudentModel:
                         "Email": row[3],
                         "Department": row[4],
                         "Phone Number": row[5],
-                        "Status": row[6]
+                      
                     }
         return None
 
@@ -66,7 +76,7 @@ class StudentModel:
                         "Email": row[3],
                         "Department": row[4],
                         "Phone Number": row[5],
-                        "Status": row[6]
+                        
                     }
         return None
 
